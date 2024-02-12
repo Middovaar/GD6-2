@@ -1,3 +1,30 @@
-[gd_scene format=3 uid="uid://ggi8two8tdxy"]
+[gd_scene load_steps=6 format=3 uid="uid://ggi8two8tdxy"]
+
+[ext_resource type="PackedScene" uid="uid://dtf4vym6kl45p" path="res://Levels/NormalLevel.res" id="1_gk12y"]
+[ext_resource type="Script" path="res://Scripts/Base.gd" id="1_w4hsi"]
+[ext_resource type="Script" path="res://Scripts/Character/Character.gd" id="2_y8qbf"]
+[ext_resource type="Texture2D" uid="uid://bm1qywt2wpc1x" path="res://Sprites/TestPlayer.png" id="3_fp7ep"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vj6sr"]
+size = Vector2(304.444, 304.444)
 
 [node name="Base" type="Node2D"]
+script = ExtResource("1_w4hsi")
+
+[node name="NormalLevel" parent="." instance=ExtResource("1_gk12y")]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+collision_mask = 7
+script = ExtResource("2_y8qbf")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(150, 849)
+scale = Vector2(0.45, 0.45)
+shape = SubResource("RectangleShape2D_vj6sr")
+
+[node name="TestPlayer" type="Sprite2D" parent="CharacterBody2D/CollisionShape2D"]
+texture = ExtResource("3_fp7ep")
+metadata/_edit_lock_ = true
+
+[connection signal="LevelChanger" from="CharacterBody2D" to="." method="_on_level_changer"]
+[connection signal="WhatLevelToQueueFree" from="CharacterBody2D" to="." method="_on_what_level_to_queue_free"]
