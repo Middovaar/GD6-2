@@ -3,28 +3,31 @@
 [ext_resource type="PackedScene" uid="uid://dtf4vym6kl45p" path="res://Levels/NormalLevel.res" id="1_gk12y"]
 [ext_resource type="Script" path="res://Scripts/Base.gd" id="1_w4hsi"]
 [ext_resource type="Script" path="res://Scripts/Character/Character.gd" id="2_y8qbf"]
-[ext_resource type="Texture2D" uid="uid://bm1qywt2wpc1x" path="res://Sprites/TestPlayer.png" id="3_fp7ep"]
+[ext_resource type="Texture2D" uid="uid://b3qpt6gl0ooif" path="res://Sprites/Character.png" id="4_yk51f"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vj6sr"]
-size = Vector2(304.444, 304.444)
+size = Vector2(140, 304.444)
 
 [node name="Base" type="Node2D"]
 script = ExtResource("1_w4hsi")
 
 [node name="NormalLevel" parent="." instance=ExtResource("1_gk12y")]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="Player" type="CharacterBody2D" parent="."]
+unique_name_in_owner = true
 collision_mask = 7
 script = ExtResource("2_y8qbf")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
-position = Vector2(150, 849)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+position = Vector2(189.5, 849)
 scale = Vector2(0.45, 0.45)
 shape = SubResource("RectangleShape2D_vj6sr")
 
-[node name="TestPlayer" type="Sprite2D" parent="CharacterBody2D/CollisionShape2D"]
-texture = ExtResource("3_fp7ep")
-metadata/_edit_lock_ = true
+[node name="Character" type="Sprite2D" parent="Player/CollisionShape2D"]
+scale = Vector2(0.422222, 0.388889)
+texture = ExtResource("4_yk51f")
 
-[connection signal="LevelChanger" from="CharacterBody2D" to="." method="_on_level_changer"]
-[connection signal="WhatLevelToQueueFree" from="CharacterBody2D" to="." method="_on_what_level_to_queue_free"]
+[connection signal="SpikeLevelChange" from="NormalLevel" to="." method="_on_normal_level_spike_level_change"]
+[connection signal="LevelChanger" from="Player" to="." method="_on_level_changer"]
+[connection signal="PlayerPositioninX" from="Player" to="NormalLevel" method="_on_player_positionin_x"]
+[connection signal="WhatLevelToQueueFree" from="Player" to="." method="_on_what_level_to_queue_free"]

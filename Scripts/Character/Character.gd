@@ -6,9 +6,12 @@ var gravity = 2500
 
 @export var CurrentLevelActive:String = "normal"
 
+## LevelChangerSigs
 signal LevelChanger(LevelWeGoingTo)
 signal WhatLevelToQueueFree(LevelToRelieve)
 
+## Player State Sigs
+signal PlayerPositioninX(PlayerPositioninX)
 
 func get_input():
 	velocity.x = 0
@@ -33,11 +36,6 @@ func get_input():
 	var quit = Input.is_action_just_pressed('Quit')
 	if quit:
 		get_tree().quit(0)
-	
-	
-	
-	
-	
 	
 	## Debug Level Switches
 	var LevelWeGoingTo:String
@@ -99,8 +97,20 @@ func get_input():
 		
 		CurrentLevelActive = "spikes"
 		emit_signal("LevelChanger", LevelWeGoingTo)
-	
+
 func _physics_process(delta):
 	velocity.y += gravity * delta
 	get_input()
 	move_and_slide()
+
+
+func _ready():
+	_get_scree_scroll_position()
+
+
+func _get_scree_scroll_position():
+	var PlayerPositioninX 
+	PlayerPositioninX = floorf(self.position.x + 82.4)
+	await get_tree().create_timer(0.01).timeout
+	emit_signal("PlayerPositioninX", PlayerPositioninX)
+	_get_scree_scroll_position()
