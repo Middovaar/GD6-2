@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://d3ommfd6pwy34"
+path="res://.godot/imported/run weird.wav-147e0ff8a57d8ffad24c4f5085970d17.sample"
+
+[deps]
+
+source_file="res://Music/run weird.wav"
+dest_files=["res://.godot/imported/run weird.wav-147e0ff8a57d8ffad24c4f5085970d17.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0

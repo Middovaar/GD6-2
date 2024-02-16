@@ -10,6 +10,19 @@ var gravity = 2500
 signal LevelChanger(LevelWeGoingTo)
 signal WhatLevelToQueueFree(LevelToRelieve)
 
+## Scripted Level Changers
+signal SpikesLevelChanger()
+
+## Sounds
+signal JumpSound()
+signal WierdJumpSound()
+signal RunningSound()
+signal WierdRunningSound()
+signal StopRunning()
+
+## Wierd Platform Connect
+signal ConnectWithFirstWierdPlatform()
+
 ## Player State Sigs
 signal PlayerPositioninX(PlayerPositioninX)
 
@@ -27,10 +40,26 @@ func get_input():
 	## Controls
 	if is_on_floor() and jump:
 		velocity.y = jump_speed
-	if right:
+		if CurrentLevelActive != "wierd":
+			emit_signal("JumpSound")
+		else:
+			emit_signal("WierdJumpSound")
+	if right and !is_on_wall():
 		velocity.x += run_speed
-	if left:
+		if CurrentLevelActive != "wierd":
+			emit_signal("RunningSound")
+		else:
+			emit_signal("WierdRunningSound")
+		
+	if left and !is_on_wall():
 		velocity.x -= run_speed
+		if CurrentLevelActive != "wierd":
+			emit_signal("RunningSound")
+		else:
+			emit_signal("WierdRunningSound")
+			
+	if !left and !right:
+		emit_signal("StopRunning")
 	
 	## Exits Game
 	var quit = Input.is_action_just_pressed('Quit')
@@ -103,14 +132,35 @@ func _physics_process(delta):
 	get_input()
 	move_and_slide()
 
+func _ifspikes():
+	if CurrentLevelActive == "spikes" and self.position.y >= 490:
+		gravity = -2500
+		emit_signal("SpikesLevelChanger")
+		set_up_direction(Vector2.DOWN)
+		jump_speed = 1200
+		%Character.rotate(deg_to_rad(180))
+		await get_tree().create_timer(0.7).timeout
+		emit_signal("ConnectWithFirstWierdPlatform")
+		CurrentLevelActive = "wierd"
+		
+	else:
+		await get_tree().create_timer(0.2).timeout
+		_ifspikes()
+
 
 func _ready():
+	set_up_direction(Vector2.UP)
 	_get_scree_scroll_position()
-
+	_ifspikes()
 
 func _get_scree_scroll_position():
 	var PlayerPositioninX 
 	PlayerPositioninX = floorf(self.position.x + 82.4)
 	await get_tree().create_timer(0.01).timeout
 	emit_signal("PlayerPositioninX", PlayerPositioninX)
+	if PlayerPositioninX >= 2740:
+		CurrentLevelActive = "spikes"
 	_get_scree_scroll_position()
+
+
+
