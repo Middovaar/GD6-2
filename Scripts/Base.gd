@@ -55,7 +55,7 @@ func _on_normal_level_spike_level_change():
 
 func _on_player_spikes_level_changer():
 	%Player.position = Vector2(2560/2 - 150, 200)
-	_on_what_level_to_queue_free("spikes")
+	_on_what_level_to_queue_frede("spikes")
 	_on_level_changer("wierd")
 
 
